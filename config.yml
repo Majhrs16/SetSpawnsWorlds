@@ -1,9 +1,0 @@
-config-version: 1
-welcome-message: true
-welcome-message-text:
-- "&l--------------------------------"
-- "&a     Bienvenido %player% =D"
-- "&l--------------------------------"
-
-broadcast-actions: true
-SaveLastGameMode: false
