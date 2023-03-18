@@ -9,7 +9,7 @@ en Eclipse importan desde el sistema de archivos el src, y por separado importan
 
 
 # -- CONFIGURACION DEL PROYECTO --
-Click derecho en el proyecto propiedades, en build path > libraries, agregan el spigot-1.8.8.jar, worldedit-bukkit-6.1.9.jar y worldguard-6.1.jar
+Click derecho en el proyecto > propiedades > build path > libraries, agregan los jar: spigot-1.8.8.jar, worldedit-bukkit-6.1.9.jar y worldguard-6.1.jar.
 
-
-Por ultimo exportar como jar y listo.
+# -- COMPILACION --
+Por ultimo, Menu > File > export, exportar como jar y listo.
