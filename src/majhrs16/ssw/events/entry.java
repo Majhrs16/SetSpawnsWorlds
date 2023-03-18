@@ -32,14 +32,8 @@ public class entry implements Listener{
 		*/
 
 		String path = "spawn";
-		if (config.contains(path + ".world") && config.getString(path + ".world").equals(player.getWorld().getName())) {
+		if (util.IF(path + ".Force")) {
 			util.tpto(player, util.getLoc(player, path));
-
-		} else if (config.contains(path + ".Lobbys." + player.getWorld().getName())) {
-			util.tpto(player, util.getLoc(player, path + ".Lobbys." + player.getWorld().getName()));
-
-		} else if (config.contains(path + ".TpLastCords." + player.getWorld().getName())) {
-			util.tpto(player, util.getLoc(player, path + ".TpLastCords." + player.getWorld().getName()));
 		}
 
 		if (util.IF("welcome-message")) {
