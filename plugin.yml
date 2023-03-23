@@ -1,5 +1,5 @@
 main: majhrs16.ssw.main
-version: 1.7.6
+version: 1.7.7
 name: SSW
 commands:
   SetSpawnsWorlds:

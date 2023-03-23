@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import majhrs16.ssw.main;
 import majhrs16.ssw.util;
@@ -62,7 +61,7 @@ public class setworld implements Listener{
 		} if (config.contains(path + ".world") && config.getString(path + ".world").equals(WorldNameAfter) && config.contains(path + ".TpLastCords." + WorldNameAfter)) {
 			list.add(ChatColor.translateAlternateColorCodes("&".charAt(0), plugin.name + "   &espawn&f.&eTpLastCords&f.&c" + WorldNameAfter + " &6<&f-&6> &espawn&f.&cworld"));
 		}
-
+		
 		if (list.size() > 0) {
 			for (Integer i = 0; i < list.size(); i++) {
 				Bukkit.getConsoleSender().sendMessage(list.get(i));
@@ -83,31 +82,30 @@ public class setworld implements Listener{
 			l.setWorld(event.getTo().getWorld());
 			util.tpto(player, l);
 		}
-		
+
 		if (config.contains(path + ".TpLastCords")) { //////////////////////////////////////////////////////////////////// TpLastCords
 			GameMode Gamemode;
 			final util.WXYZYPGM l2;
-			path = player.getUniqueId() + "." + WorldNameAfter;
-			if (players.contains(path + ".gamemode")) {
+
+			path = player.getUniqueId() + "." + event.getTo().getWorld().getName();
+			if (players.contains(path)) {
 				Gamemode = util.toGameMode(player, path);
 				if (util.IF("SaveLastGameMode")) {
 					Gamemode = util.toGameMode(players, player, path);
 				}
 
 				l2 = util.getLoc(players, player, path);
+				l2.setGamemode(Gamemode);
 
 			} else {
 				path = "spawn.TpLastCords." + WorldNameAfter;
-				Gamemode = util.toGameMode(player, path);
-
 				l2 = util.getLoc(player, path);
 			}
 
 			l2.setWorld(event.getTo().getWorld());
-			l2.setGamemode(Gamemode);
 
-			path = "spawn";
-			if (config.contains(path + ".TpLastCords." + WorldNameBefore)) {
+			path = "spawn.TpLastCords.";
+			if (config.contains(path + WorldNameBefore)) {
 				Location l = event.getFrom();
 				Double x   = l.getX();
 				Double y   = l.getY();
@@ -144,36 +142,25 @@ public class setworld implements Listener{
 					players.set(path + ".gamemode", player.getGameMode().toString());
 				}
 				plugin.savePlayers();
-				
-				new BukkitRunnable() {
-					public void run() {
-						player.setGameMode(l2.getGamemode());
-					}
-				}.runTaskLater(plugin, 10L);
 
-
-				////////////////////////////////////////////////////////////////////
-				// Corrector de entrada y salida no natural del nether
-				if(l.getWorld().getBlockAt(x.intValue(), y.intValue(), z.intValue()).getType() != Material.PORTAL && event.getTo().getWorld().getBlockAt(0, 127, 0).getType() == Material.BEDROCK || // Overworld -> Nether
-				   l.getWorld().getBlockAt(x.intValue(), y.intValue(), z.intValue()).getType() == Material.PORTAL && l.getWorld().getBlockAt(0, 127, 0).getType() == Material.BEDROCK) { // Nether -> Overworld
+				if (event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL ||
+						event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL || 
+						event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND) {
 					return;
 				}
 
-				////////////////////////////////////////////////////////////////////
-				// Corrector de entrada y salida natural del nether
-				if(l.getWorld().getBlockAt(x.intValue(), y.intValue(), z.intValue()).getType() == Material.PORTAL && event.getTo().getWorld().getBlockAt(0, 127, 0).getType() == Material.BEDROCK &&
-						l.getWorld().getBlockAt(0, 127, 0).getType() == Material.AIR || // Overworld -> Nether
-				   l.getWorld().getBlockAt(x.intValue(), y.intValue(), z.intValue()).getType() == Material.PORTAL &&
-						l.getWorld().getBlockAt(0, 127, 0).getType() == Material.BEDROCK &&
-						event.getTo().getWorld().getBlockAt(0, 127, 0).getType() == Material.AIR) { // Nether -> Overworld
+				if(l.getWorld().getBlockAt(x.intValue(), y.intValue(), z.intValue()).getType() != Material.PORTAL && event.getTo().getWorld().getBlockAt(0, 127, 0).getType() == Material.BEDROCK || // Overworld -> Nether
+						l.getWorld().getBlockAt(x.intValue(), y.intValue(), z.intValue()).getType() != Material.PORTAL && event.getTo().getWorld().getBlockAt(0, 127, 0).getType() == Material.AIR) { // Nether -> Overworld0
 					return;
 				}
 			}
 
 			//////////////////////
 			// Tp a LastCord
-			if (config.contains("spawn.TpLastCords." + WorldNameAfter))
+			path = "spawn.TpLastCords.";
+			if (config.contains(path + WorldNameAfter)) {
 				util.tpto(player, l2);
+			}
 		}
 	}
 }

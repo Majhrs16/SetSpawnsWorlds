@@ -90,7 +90,7 @@ public class util {
 	}
 	
 	public boolean IF(FileConfiguration file, String path) {
-		return file.contains(path) && file.getBoolean(path);
+		return file.contains(path) && file.getString(path).equals("true");
 	}
 	
 	public boolean IF(String path) {
