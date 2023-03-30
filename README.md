@@ -1,4 +1,4 @@
-# SetSpawnsWorlds v1.7.6
+# SetSpawnsWorlds v1.7.7
 Administracion de Spawn, Lobbys y guardado de ultima ubicacion por mundos!! Plugin spigot
 
 
